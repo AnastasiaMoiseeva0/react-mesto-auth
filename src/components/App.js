@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "../index.css";
 import Header from "./Header.js";
 import Main from "./Main.js";
@@ -10,6 +11,9 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import ProtectedRoute from "./ProtectedRoute";
+import Login from "./Login";
+import Register from "./Register";
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
@@ -18,6 +22,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [cards, setCards] = useState([]);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     Promise.all([api.getInitialCards(), api.getUserInfo()])
@@ -121,7 +126,14 @@ function App() {
   }
 
   return (
-    <div className="page">
+    <Routes>
+      <Route path="/sign-up" element={<Register />} />
+      <Route path="/sign-in" element={<Login />} />
+      <Route path='/'element={
+      <ProtectedRoute 
+        loggedIn={loggedIn} 
+        element={ !loggedIn ? <Navigate to="/sign-in" replace /> :
+        <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
         <Header />
         <Main
@@ -157,7 +169,9 @@ function App() {
         <ImagePopup card={selectedCard} onClose={closeAllPopups}></ImagePopup>
       </CurrentUserContext.Provider>
       <Footer />
-    </div>
+      </div>
+      } />} />
+    </Routes>
   );
 }
 

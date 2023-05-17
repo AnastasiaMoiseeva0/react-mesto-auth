@@ -49,3 +49,11 @@
 @import url(./blocks/place/__like-counter/place__like-counter.css);
 @import url(./blocks/footer/footer.css);
 @import url(./blocks/footer/__logo/footer__logo.css);
+@import url(./blocks/login/login.css);
+@import url(./blocks/login/__title/login__title.css);
+@import url(./blocks/login/__field/login__field.css);
+@import url(./blocks/login/__form/login__form.css);
+@import url(./blocks/login/__submit/login__submit.css);
+@import url(./blocks/login/__signin/login__signin.css);
+@import url(./blocks/login/__login-link/login__login-link.css);
+@import url(./blocks/login/__signin-title/login__signin-title.css);
