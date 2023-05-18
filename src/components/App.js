@@ -22,7 +22,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [cards, setCards] = useState([]);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   useEffect(() => {
     Promise.all([api.getInitialCards(), api.getUserInfo()])
@@ -135,7 +135,7 @@ function App() {
         element={ !loggedIn ? <Navigate to="/sign-in" replace /> :
         <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header />
+        <Header isLoggedIn={false} linkTitle={'Выйти'} linkUrl={'/sign-in'}/>
         <Main
           cards={cards}
           onEditAvatar={() => handleEditAvatarClick()}

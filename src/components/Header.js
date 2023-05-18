@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
 import mestoLogo from "../images/mesto-logo.svg"; 
 
-function Header() {
+function Header({ isLoggedIn, linkTitle, linkUrl }) {
   return (
     <header className="header">
         <img
@@ -8,6 +9,11 @@ function Header() {
           src={mestoLogo}
           alt="Логотип Mesto Russia"
         />
+        {isLoggedIn
+          ? <div> logged in</div>
+          : linkUrl && linkTitle
+            ? <Link className="header__link" to={linkUrl} >{linkTitle}</Link>
+            : []}
       </header>
   );
 }
