@@ -3,7 +3,7 @@ import Header from "./Header.js";
 function Login() {
   return (
     <div className="page">
-      <Header />
+      <Header linkTitle={'Регистрация'} linkUrl={'/sign-up'}/>
       <div className="login">
         <h1 className="login__title">Вход</h1>
       <form
