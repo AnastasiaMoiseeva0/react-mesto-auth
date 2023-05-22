@@ -7,7 +7,7 @@ function InfoTooltip({imageUrl, title, isOpen, onClose}) {
         onClose={onClose}
     >
       <div  className="info-popup">
-        <img className="info-popup__image" src={imageUrl}></img>
+        <img className="info-popup__image" src={imageUrl} />
         <h2 className="info-popup__title">{title}</h2>
       </div>
     </Popup>

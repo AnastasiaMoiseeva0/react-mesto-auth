@@ -1,5 +1,5 @@
 import Header from "./Header";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import InfoTooltip from "./InfoTooltip";
 import failRegister from "../images/fail-registration-icon.svg";
 import successfulRegister from "../images/successful-registration-icon.svg";
@@ -15,8 +15,6 @@ function Register() {
     password: "",
   });
 
-  const navigate = useNavigate();
-
   function closeAllPopup() {
     setSuccessfulRegisterPopupOpen(false);
     setFailRegisterPopupOpen(false);
@@ -31,9 +29,9 @@ function Register() {
     });
   }
 
-  function onSubmit(event) {
+  function onRegister(event) {
     event.preventDefault();
-    if (formValue.password, formValue.email) {
+    if ((formValue.password, formValue.email)) {
       auth.register(formValue.password, formValue.email).then(
         (res) => {
           setSuccessfulRegisterPopupOpen(true);
@@ -47,10 +45,16 @@ function Register() {
 
   return (
     <div className="page">
-      <Header isLoggedIn={false} linkTitle={"Войти"} linkUrl={"/sign-in"} />
+      <Header>
+        <div>
+          <Link to="/sign-in" className="header__link">
+            Вход
+          </Link>
+        </div>
+      </Header>
       <div className="login">
         <h1 className="login__title">Регистрация</h1>
-        <form className="login__form" onSubmit={onSubmit} noValidate>
+        <form className="login__form" onSubmit={onRegister} noValidate>
           <input
             className="login__field"
             placeholder="Email"
@@ -58,7 +62,7 @@ function Register() {
             required
             name="email"
             onChange={handleChange}
-            value={formValue.email} 
+            value={formValue.email}
           />
           <input
             className="login__field"
@@ -67,7 +71,7 @@ function Register() {
             required
             name="password"
             onChange={handleChange}
-            value={formValue.password} 
+            value={formValue.password}
           />
           <button type="submit" className="login__submit button">
             Зарегистрироваться
