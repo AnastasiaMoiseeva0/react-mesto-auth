@@ -1,0 +1,6 @@
+.header__info {
+    background-image: url(../../../images/user-info-button.svg);
+    width: 24px;
+    height: 24px;
+    background-size: cover;
+}

@@ -1,10 +1,18 @@
 .login__submit {
-    margin-top: 216px;
+    margin-top: 173px;
     background-color: #FFF;
     font-family: 'Inter', Arial, sans-serif;
     font-weight: 400;
-    font-size: 18px;
-    line-height: 22px;
+    font-size: 16px;
+    line-height: 20px;
     text-align: center;
     color: #000;
+}
+
+@media screen and (min-width: 769px) {
+    .login__submit {
+        margin-top: 216px;
+        font-size: 18px;
+        line-height: 22px;
+    }
 }
