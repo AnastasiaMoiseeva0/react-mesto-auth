@@ -26,4 +26,4 @@
 
 Страница корректно отображается браузерами Chrome, Firefox,  Safari  и Yandex Browser, контент отцентрирован для экранов больше 1280px, интерфейс корректно отображается на различных устройствах.
 
-Проект доступен по следующей ссылке: [Ссылка на проект](https://anastasiamoiseeva0.github.io/mesto-react/)
+Проект доступен по следующей ссылке: [Ссылка на проект](https://anastasiamoiseeva0.github.io/react-mesto-auth/)
