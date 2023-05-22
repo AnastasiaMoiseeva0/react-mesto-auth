@@ -1,9 +1,0 @@
-.place__icon-like {
-    background-image: url(../../../images/place-like.svg);
-    width: 22px;
-    height: 19px;
-}
-
-.place__icon-like:hover {
-    opacity: .5;
-}
