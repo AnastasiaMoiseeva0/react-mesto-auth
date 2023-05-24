@@ -1,7 +1,8 @@
 .place__photo {
     width: 282px;
     height: 282px;
-    object-fit: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .place__photo:hover {

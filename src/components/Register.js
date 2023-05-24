@@ -5,41 +5,30 @@ import failRegister from "../images/fail-registration-icon.svg";
 import successfulRegister from "../images/successful-registration-icon.svg";
 import { useState } from "react";
 import * as auth from "../utils/auth.js";
+import { useForm } from "../hooks/useForm.js";
 
 function Register() {
   const [isSuccessfulRegisterPopupOpen, setSuccessfulRegisterPopupOpen] =
     useState(false);
   const [isFailRegisterPopupOpen, setFailRegisterPopupOpen] = useState(false);
-  const [formValue, setFormValue] = useState({
-    email: "",
-    password: "",
-  });
+  const { values, handleChange } = useForm({});
 
   function closeAllPopup() {
     setSuccessfulRegisterPopupOpen(false);
     setFailRegisterPopupOpen(false);
   }
 
-  function handleChange(event) {
-    const { name, value } = event.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
-  }
-
   function onRegister(event) {
     event.preventDefault();
-    if ((formValue.password, formValue.email)) {
-      auth.register(formValue.password, formValue.email).then(
-        (res) => {
+    if ((values.password, values.email)) {
+      auth
+        .register(values.password, values.email)
+        .then(() => {
           setSuccessfulRegisterPopupOpen(true);
-        },
-        (err) => {
+        })
+        .catch((err) => {
           setFailRegisterPopupOpen(true);
-        }
-      );
+        });
     }
   }
 
@@ -54,7 +43,7 @@ function Register() {
       </Header>
       <div className="login">
         <h1 className="login__title">Регистрация</h1>
-        <form className="login__form" onSubmit={onRegister} noValidate>
+        <form className="login__form" onSubmit={onRegister}>
           <input
             className="login__field"
             placeholder="Email"
@@ -62,7 +51,7 @@ function Register() {
             required
             name="email"
             onChange={handleChange}
-            value={formValue.email}
+            value={values.email}
           />
           <input
             className="login__field"
@@ -71,7 +60,7 @@ function Register() {
             required
             name="password"
             onChange={handleChange}
-            value={formValue.password}
+            value={values.password}
           />
           <button type="submit" className="login__submit button">
             Зарегистрироваться
@@ -87,12 +76,14 @@ function Register() {
       <InfoTooltip
         title="Вы успешно зарегистрировались!"
         imageUrl={successfulRegister}
+        imageName={"Успешная регистрация"}
         onClose={closeAllPopup}
         isOpen={isSuccessfulRegisterPopupOpen}
       />
       <InfoTooltip
         title="Что-то пошло не так! Попробуйте еще раз."
         imageUrl={failRegister}
+        imageName={"Неуспешная регистрация"}
         onClose={closeAllPopup}
         isOpen={isFailRegisterPopupOpen}
       />

@@ -8,6 +8,7 @@ import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
 import api from "../utils/api.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { AppContext } from "../contexts/AppContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
@@ -25,6 +26,8 @@ function App() {
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard
 
   const navigate = useNavigate();
 
@@ -33,8 +36,9 @@ function App() {
   }, [loggedIn]);
 
   function tokenCheck() {
-    auth.getCurrentUser().then(
-      (res) => {
+    auth
+      .getCurrentUser()
+      .then((res) => {
         if (res) {
           setUserEmail(res.data.email);
           setLoggedIn(true);
@@ -42,11 +46,10 @@ function App() {
         } else {
           navigate("/sign-in", { replace: true });
         }
-      },
-      () => {
+      })
+      .catch(() => {
         setLoggedIn(false);
-      }
-    );
+      });
   }
 
   function onSignOut() {
@@ -91,46 +94,37 @@ function App() {
       });
   }
 
+  function handleSubmit(request) {
+    setIsLoading(true);
+    request()
+      .then(closeAllPopups)
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  }
+
   function handleUpdateUser(user) {
-    api
-      .setUserInfo(user)
-      .then((user) => {
-        setCurrentUser(user);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        closeAllPopups();
-      });
+    function makeRequest() {
+      return api.setUserInfo(user).then((user) => setCurrentUser(user));
+    }
+    handleSubmit(makeRequest);
   }
 
   function handleUpdateAvatar(newAvatar) {
-    api
-      .setNewAvatar(newAvatar)
-      .then((newAvatar) => {
-        setCurrentUser(newAvatar);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        closeAllPopups();
-      });
+    function makeRequest() {
+      return api
+        .setNewAvatar(newAvatar)
+        .then((newAvatar) => setCurrentUser(newAvatar));
+    }
+    handleSubmit(makeRequest);
   }
 
   function handleAddPlaceSubmit(newCard) {
-    api
-      .createCards(newCard)
-      .then((card) => {
-        setCards([card, ...cards]);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        closeAllPopups();
-      });
+    function makeRequest() {
+      return api
+        .createCards(newCard)
+        .then((card) => setCards([card, ...cards]));
+    }
+    handleSubmit(makeRequest);
   }
 
   function handleLogin() {
@@ -181,53 +175,52 @@ function App() {
             loggedIn={loggedIn}
             element={
               <div className="page">
-                <CurrentUserContext.Provider value={currentUser}>
-                  <Header isLoggedIn={false}>
-                    <div className="header__navigation">
-                      <div className="header__email">{userEmail}</div>
-                      <button
-                        className="header__link button"
-                        onClick={onSignOut}
-                      >
-                        Выйти
-                      </button>
-                    </div>
-                  </Header>
-                  <Main
-                    cards={cards}
-                    onEditAvatar={() => handleEditAvatarClick()}
-                    onEditProfile={() => handleEditProfileClick()}
-                    onAddPlace={() => handleAddPlaceClick()}
-                    onCardClick={(card) => handleCardClick(card)}
-                    onCardLike={(card) => handleCardLike(card)}
-                    onCardDelete={(card) => handleCardDelete(card)}
-                  />
-                  <EditProfilePopup
-                    isOpen={isEditProfilePopupOpen}
-                    onClose={closeAllPopups}
-                    onUpdateUser={handleUpdateUser}
-                  />
-                  <AddPlacePopup
-                    isOpen={isAddPlacePopupOpen}
-                    onClose={closeAllPopups}
-                    onAddPlace={handleAddPlaceSubmit}
-                  />
-                  <PopupWithForm
-                    title="Вы уверены"
-                    name="deleteCard"
-                    buttonText="Да"
-                    onClose={closeAllPopups}
-                  ></PopupWithForm>
-                  <EditAvatarPopup
-                    isOpen={isEditAvatarPopupOpen}
-                    onClose={closeAllPopups}
-                    onUpdateAvatar={handleUpdateAvatar}
-                  />
-                  <ImagePopup
-                    card={selectedCard}
-                    onClose={closeAllPopups}
-                  ></ImagePopup>
-                </CurrentUserContext.Provider>
+                <AppContext.Provider value={isLoading}>
+                  <CurrentUserContext.Provider value={currentUser}>
+                    <Header isLoggedIn={false}>
+                      <div className="header__navigation">
+                        <div className="header__email">{userEmail}</div>
+                        <button
+                          className="header__link button"
+                          onClick={onSignOut}
+                        >
+                          Выйти
+                        </button>
+                      </div>
+                    </Header>
+                    <Main
+                      cards={cards}
+                      onEditAvatar={() => handleEditAvatarClick()}
+                      onEditProfile={() => handleEditProfileClick()}
+                      onAddPlace={() => handleAddPlaceClick()}
+                      onCardClick={(card) => handleCardClick(card)}
+                      onCardLike={(card) => handleCardLike(card)}
+                      onCardDelete={(card) => handleCardDelete(card)}
+                    />
+                    <EditProfilePopup
+                      isOpen={isEditProfilePopupOpen}
+                      onClose={closeAllPopups}
+                      onUpdateUser={handleUpdateUser}
+                    />
+                    <AddPlacePopup
+                      isOpen={isAddPlacePopupOpen}
+                      onClose={closeAllPopups}
+                      onAddPlace={handleAddPlaceSubmit}
+                    />
+                    <PopupWithForm
+                      title="Вы уверены"
+                      name="deleteCard"
+                      buttonText="Да"
+                      onClose={closeAllPopups}
+                    />
+                    <EditAvatarPopup
+                      isOpen={isEditAvatarPopupOpen}
+                      onClose={closeAllPopups}
+                      onUpdateAvatar={handleUpdateAvatar}
+                    />
+                    <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+                  </CurrentUserContext.Provider>
+                </AppContext.Provider>
                 <Footer />
               </div>
             }

@@ -1,9 +1,11 @@
-import { useRef } from "react";
+import { useRef, useContext } from "react";
 import PopupWithForm from "./PopupWithForm.js";
+import { AppContext } from "../contexts/AppContext";
 
 function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
 
     const newAvatar = useRef(null);
+    const isLoading = useContext(AppContext);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -18,7 +20,7 @@ function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
     <PopupWithForm
       title="Обновить аватар"
       name="editAvatar"
-      buttonText="Сохранить"
+      buttonText={isLoading? 'Сохранение...' : 'Сохранить'}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}

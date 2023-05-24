@@ -1,15 +1,16 @@
 import Popup from "./Popup";
+import { usePopupClose } from "../hooks/usePopupClose";
 
 function PopupWithForm({name, title, children, buttonText, isOpen, onClose, onSubmit}) {
+usePopupClose(isOpen, onClose);
 return (
   <Popup 
   isOpen={isOpen}
   onClose={onClose}
   >
     <form
-      className="edit-form edit-form_profile"
+      className="edit-form"
       name={name}
-      noValidate
       onSubmit={onSubmit}
     >
       <h2 className="edit-form__title">{title}</h2>

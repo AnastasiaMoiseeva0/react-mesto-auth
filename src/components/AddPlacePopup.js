@@ -1,16 +1,18 @@
-import { useRef } from "react";
+import { useState, useContext } from "react";
 import PopupWithForm from "./PopupWithForm.js";
+import { AppContext } from "../contexts/AppContext";
 
 function AddPlacePopup({isOpen, onClose, onAddPlace}) {
-    const namePlace = useRef(null);
-    const linkPlace = useRef(null);
+  const isLoading = useContext(AppContext);
+  const [namePlace, setNamePlace] = useState('');
+  const [linkPlace, setLinkPlace] = useState('');
 
     function handleSubmit(e) {
         e.preventDefault();
       
         onAddPlace({
-          name: namePlace.current.value,
-          link: linkPlace.current.value,
+          name: namePlace,
+          link: linkPlace,
         });
     } 
 
@@ -18,7 +20,7 @@ function AddPlacePopup({isOpen, onClose, onAddPlace}) {
         <PopupWithForm
         title="Новое место"
         name="newCardPopup"
-        buttonText="Создать"
+        buttonText={isLoading? 'Создание...' : 'Создать'}
         isOpen={isOpen}
         onClose={onClose}
         onSubmit={handleSubmit}
@@ -32,7 +34,7 @@ function AddPlacePopup({isOpen, onClose, onAddPlace}) {
           minLength="2"
           maxLength="30"
           required
-          ref={namePlace}
+          onChange={(e) => setNamePlace(e.target.value)}
         />
         <span className="placeTitleInput-error"></span>
         <input
@@ -42,7 +44,7 @@ function AddPlacePopup({isOpen, onClose, onAddPlace}) {
           placeholder="Ссылка на картинку"
           name="urlInput"
           required
-          ref={linkPlace}
+          onChange={(e) => setLinkPlace(e.target.value)}
         />
         <span className="urlInput-error"></span>
       </PopupWithForm>
