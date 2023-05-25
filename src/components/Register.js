@@ -51,7 +51,7 @@ function Register() {
             required
             name="email"
             onChange={handleChange}
-            value={values.email}
+            value={values.email || ''}
           />
           <input
             className="login__field"
@@ -60,7 +60,7 @@ function Register() {
             required
             name="password"
             onChange={handleChange}
-            value={values.password}
+            value={values.password || ''}
           />
           <button type="submit" className="login__submit button">
             Зарегистрироваться

@@ -1,26 +1,25 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import PopupWithForm from "./PopupWithForm.js";
 import { AppContext } from "../contexts/AppContext";
+import { useForm } from "../hooks/useForm.js";
 
 function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   const currentUser = useContext(CurrentUserContext);
   const isLoading = useContext(AppContext);
-
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const { values, setValues, handleChange } = useForm({});
 
   useEffect(() => {
-    setName(currentUser?.name ?? '');
-    setDescription(currentUser?.about ?? '');
+    setValues(currentUser?.name ?? '');
+    setValues(currentUser?.about ?? '');
   }, [currentUser, isOpen]); 
 
   function handleSubmit(e) {
     e.preventDefault();
   
     onUpdateUser({
-      name,
-      about: description,
+      name: values.name,
+      about: values.description,
     });
   } 
 
@@ -34,29 +33,27 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       onSubmit={handleSubmit}
     >
       <input
-        id="nameInput"
         className="edit-form__field edit-form__field_name-input"
         placeholder="Имя"
         type="text"
-        name="nameInput"
+        name="name"
         minLength="2"
         maxLength="40"
         required
-        value={name}
-        onChange={e => setName(e.target.value)}
+        value={values.name}
+        onChange={handleChange}
       />
       <span className="nameInput-error"></span>
       <input
-        id="jobInput"
         className="edit-form__field edit-form__field_job-input"
         placeholder="О себе"
         type="text"
-        name="jobInput"
+        name="description"
         minLength="2"
         maxLength="200"
         required
-        value={description}
-        onChange={e => setDescription(e.target.value)}
+        value={values.description}
+        onChange={handleChange}
       />
       <span className="jobInput-error"></span>
     </PopupWithForm>

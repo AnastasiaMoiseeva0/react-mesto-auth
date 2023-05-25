@@ -51,7 +51,7 @@ function Login({ handleLogin }) {
             placeholder="Email"
             type="email"
             name="email"
-            value={values.email}
+            value={values.email || ''}
             onChange={handleChange}
             required
           />
@@ -60,7 +60,7 @@ function Login({ handleLogin }) {
             placeholder="Пароль"
             type="password"
             name="password"
-            value={values.password}
+            value={values.password || ''}
             onChange={handleChange}
             required
           />

@@ -1,4 +1,7 @@
+import { usePopupClose } from "../hooks/usePopupClose";
+
 function Popup({isOpen, children, onClose}) {
+  usePopupClose(isOpen, onClose);
   return (
     <div className={`popup ${isOpen ? "popup_opened" : ""}`} onClick={onClose}>
       <div

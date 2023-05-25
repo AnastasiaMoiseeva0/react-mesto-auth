@@ -1,19 +1,19 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import PopupWithForm from "./PopupWithForm.js";
 import { AppContext } from "../contexts/AppContext";
+import { useForm } from "../hooks/useForm.js";
 
 function AddPlacePopup({isOpen, onClose, onAddPlace}) {
   const isLoading = useContext(AppContext);
-  const [namePlace, setNamePlace] = useState('');
-  const [linkPlace, setLinkPlace] = useState('');
+  const { values, handleChange } = useForm({});
 
     function handleSubmit(e) {
         e.preventDefault();
       
         onAddPlace({
-          name: namePlace,
-          link: linkPlace,
-        });
+          name: values.namePlace,
+          link: values.linkPlace
+      });
     } 
 
     return(
@@ -30,11 +30,12 @@ function AddPlacePopup({isOpen, onClose, onAddPlace}) {
           className="edit-form__field edit-form__field_title-input"
           type="text"
           placeholder="Название"
-          name="titleInput"
+          name="namePlace"
           minLength="2"
           maxLength="30"
           required
-          onChange={(e) => setNamePlace(e.target.value)}
+          onChange={handleChange}
+          value={values.namePlace}
         />
         <span className="placeTitleInput-error"></span>
         <input
@@ -42,9 +43,10 @@ function AddPlacePopup({isOpen, onClose, onAddPlace}) {
           className="edit-form__field edit-form__field_url-input"
           type="url"
           placeholder="Ссылка на картинку"
-          name="urlInput"
+          name="linkPlace"
           required
-          onChange={(e) => setLinkPlace(e.target.value)}
+          onChange={handleChange}
+          value={values.linkPlace}
         />
         <span className="urlInput-error"></span>
       </PopupWithForm>
