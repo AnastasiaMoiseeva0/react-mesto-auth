@@ -10,8 +10,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   const { values, setValues, handleChange } = useForm({});
 
   useEffect(() => {
-    setValues(currentUser?.name ?? '');
-    setValues(currentUser?.about ?? '');
+    setValues({
+      name: currentUser?.name ?? '',
+      description: currentUser?.about ?? ''
+    });
   }, [currentUser, isOpen]); 
 
   function handleSubmit(e) {
@@ -40,7 +42,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         minLength="2"
         maxLength="40"
         required
-        value={values.name}
+        value={values.name || ''}
         onChange={handleChange}
       />
       <span className="nameInput-error"></span>
@@ -52,7 +54,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         minLength="2"
         maxLength="200"
         required
-        value={values.description}
+        value={values.description || ''}
         onChange={handleChange}
       />
       <span className="jobInput-error"></span>
